@@ -1,0 +1,15 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.17.14:8848
+        config-long-poll-timeout: 30s
+        encode: UTF-8
+        max-retry: 3
+        file-extension: properties
+        namespace: 1eaf798b-34a0-4d3d-be19-adee25539908
+  application:
+    name: global-config
+  jackson:
+    default-property-inclusion: non_null
+    time-zone: GMT+8
