@@ -1,12 +1,11 @@
-package spring.spring.source;
+package spring.spring.source.rocketmq;
 
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.messaging.SubscribableChannel;
 
 public interface Sink {
+    String INPUT = "input";
 
-    String INTPUT = "input";
-
-    @Input(value = INTPUT)
+    @Input(value = INPUT)
     SubscribableChannel input();
 }
