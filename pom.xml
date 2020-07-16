@@ -53,8 +53,8 @@
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.rocketmq/rocketmq-client -->
         <!--<dependency>-->
-            <!--<groupId>org.apache.rocketmq</groupId>-->
-            <!--<artifactId>rocketmq-client</artifactId>-->
+            <!--<groupId>org.apache.kafka</groupId>-->
+            <!--<artifactId>kafka-client</artifactId>-->
             <!--<version>4.7.1</version>-->
         <!--</dependency>-->
         <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
@@ -153,7 +153,7 @@
         <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-stream-binder-kafka -->
         <!--<dependency>-->
             <!--<groupId>org.springframework.cloud</groupId>-->
-            <!--<artifactId>spring-cloud-stream-binder-rocketmq</artifactId>-->
+            <!--<artifactId>spring-cloud-stream-binder-kafka</artifactId>-->
             <!--<version>3.0.6.RELEASE</version>-->
         <!--</dependency>-->
         <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-stream-binder-rocketmq -->

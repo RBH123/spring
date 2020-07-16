@@ -1,4 +1,4 @@
-package spring.spring.message.kafka.producer;
+package spring.spring.message.rocketmq.producer;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;

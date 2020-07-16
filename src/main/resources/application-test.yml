@@ -11,10 +11,10 @@ spring:
           name-server: 192.168.17.14:9876
       bindings:
         output:
-          destination: test-rocketmq
+          destination: test-kafka
           content-type: application/json
         input:
-          destination: test-rocketmq
+          destination: test-kafka
           content-type: application/json
-          group: rocketmq-consumer-group
-      default-binder: rocketmq
+          group: kafka-consumer-group
+      default-binder: kafka

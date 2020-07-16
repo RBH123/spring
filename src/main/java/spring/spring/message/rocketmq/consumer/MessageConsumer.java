@@ -1,4 +1,4 @@
-package spring.spring.message.kafka.consumer;
+package spring.spring.message.rocketmq.consumer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.EnableBinding;

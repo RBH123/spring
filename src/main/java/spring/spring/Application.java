@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import spring.spring.message.kafka.producer.MessageProduct;
+import spring.spring.message.rocketmq.producer.MessageProduct;
 
 import javax.annotation.PostConstruct;
 

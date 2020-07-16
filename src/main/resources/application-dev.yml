@@ -26,15 +26,15 @@ spring:
               tags: tagA || tagB
       bindings:
         output:
-          binder: rocketmq
-          destination: test-rocketmq
+          binder: kafka
+          destination: test-kafka
           content-type: application/json
         input:
-          binder: rocketmq
-          destination: test-rocketmq
+          binder: kafka
+          destination: test-kafka
           content-type: application/json
-          group: rocketmq-consumer-group
-      default-binder: rocketmq
+          group: kafka-consumer-group
+      default-binder: kafka
   elasticsearch:
     rest:
       uris: 192.168.17.14:9200
