@@ -6,7 +6,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import spring.spring.source.rocketmq.Sink;
 
 @Slf4j
-@EnableBinding(value = Sink.class)
+@EnableBinding(Sink.class)
 public class MessageConsumer {
 
     @StreamListener(value = Sink.INPUT)

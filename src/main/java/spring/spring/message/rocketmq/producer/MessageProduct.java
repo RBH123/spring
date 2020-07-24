@@ -14,11 +14,11 @@ import javax.annotation.Resource;
 
 @Slf4j
 @Component
-@EnableBinding(Source.class)
+@EnableBinding(value = Source.class)
 public class MessageProduct {
 
     @Resource
-    @Qualifier(value = "output")
+    @Qualifier(value = Source.OUTPUT)
     MessageChannel kafkaOutput;
 
     public boolean sendMessage(String tag, String key, Object body) {

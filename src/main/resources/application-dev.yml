@@ -8,14 +8,9 @@ spring:
     host: 192.168.17.14
     port: 6379
     database: 0
-    lettuce:
-      pool:
-        max-active: 8
-        max-idle: 8
-        max-wait: 1ms
-        min-idle: 0
   cloud:
     stream:
+      default-binder: rocketmq
       rocketmq:
         binder:
           name-server: 192.168.17.14:9876
@@ -26,18 +21,33 @@ spring:
               tags: tagA || tagB
       bindings:
         output:
-          binder: kafka
-          destination: test-kafka
+          binder: rocketmq
+          destination: test-rocketmq
           content-type: application/json
         input:
-          binder: kafka
-          destination: test-kafka
+          binder: rocketmq
+          destination: test-rocketmq
           content-type: application/json
-          group: kafka-consumer-group
-      default-binder: kafka
+          group: rocketmq-consumer-group
   elasticsearch:
     rest:
       uris: 192.168.17.14:9200
+  kafka:
+    bootstrap-servers: 192.168.17.14:9092
+    producer:
+      batch-size: 100
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      bootstrap-servers: 192.168.17.14:9092
+    consumer:
+      auto-commit-interval: 10s
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: true
+  security:
+    user:
+      name: user
+      password: user
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
   type-aliases-package: spring.spring.dao.entity
