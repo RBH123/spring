@@ -22,10 +22,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationUserDetailService authenticationUserDetailService;
 
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        return new AuthenticationProvider(authenticationUserDetailService);
+    }
+
     @Override
     @SneakyThrows
     public void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(new AuthenticationProvider(authenticationUserDetailService));
+        auth.authenticationProvider(authenticationProvider());
     }
 
     @Override

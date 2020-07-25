@@ -1,13 +1,20 @@
 spring:
   datasource:
-    driver-class-name: com.alibaba.druid.proxy.DruidDriver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 217024
-    url: jdbc:mysql://192.168.17.14:3306/data_center?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.17.14:3306/data?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    name: datasource
   redis:
     host: 192.168.17.14
     port: 6379
     database: 0
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
   cloud:
     stream:
       default-binder: rocketmq
@@ -48,6 +55,14 @@ spring:
     user:
       name: user
       password: user
-mybatis:
+mybatis-plus:
+  configuration:
+    database-id: datasource
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:/mapper/*.xml
   type-aliases-package: spring.spring.dao.entity
+  global-config:
+    db-config:
+      id-type: auto
