@@ -54,7 +54,7 @@ public class AuthenticationProvider extends DaoAuthenticationProvider {
             user = JSONObject.toJavaObject(jsonObject, UserDetails.class);
         }
         //密码校验
-        super.additionalAuthenticationChecks(user, ao);
+        additionalAuthenticationChecks(user, ao);
         return super.createSuccessAuthentication(ao.getUsername(), ao, user);
     }
 
@@ -73,8 +73,8 @@ public class AuthenticationProvider extends DaoAuthenticationProvider {
         }
         String password = userDetails.getPassword();
         String inPassword = ao.getPassword();
-        if (!super.getPasswordEncoder().matches(password, inPassword)) {
-            log.info("Authentication failed: no credentials provided");
+        if (!super.getPasswordEncoder().matches(inPassword, password)) {
+            log.info("Authentication failed: bad credentials provided");
             throw new BadCredentialsException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
         }
     }

@@ -44,6 +44,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         if (this.eventPublisher != null) {
             eventPublisher.publishEvent(new InteractiveAuthenticationSuccessEvent(authResult, this.getClass()));
         }
+        log.info("登录成功");
         response.addHeader("token", JwtUtil.generateToken(userInfoAo));
     }
 
