@@ -12,7 +12,7 @@ import spring.spring.message.rocketmq.producer.MessageProduct;
 
 import javax.annotation.PostConstruct;
 
-@MapperScan(basePackages = {"spring.spring.dao"})
+@MapperScan(basePackages = "spring.spring.dao")
 @EnableDiscoveryClient
 @RefreshScope
 @SpringBootApplication

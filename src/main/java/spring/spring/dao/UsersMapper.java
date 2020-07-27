@@ -5,6 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 import spring.spring.dao.entity.Users;
 
 @Mapper
-public interface UserMapper extends BaseMapper<Users> {
+public interface UsersMapper extends BaseMapper<Users> {
 
 }

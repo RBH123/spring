@@ -11,8 +11,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import spring.spring.filter.AuthenticationProvider;
-import spring.spring.filter.JwtFilter;
+import spring.spring.filter.JwtAuthenticationFilter;
+import spring.spring.filter.JwtLoginFilter;
 import spring.spring.service.AuthenticationUserDetailService;
 
 @Configuration
@@ -40,10 +42,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/").permitAll()
-                .antMatchers("/login").permitAll()
+                .antMatchers("/login", "/register").permitAll()
                 .anyRequest()
                 .authenticated();
-        httpSecurity.addFilterBefore(new JwtFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(new JwtLoginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(new JwtAuthenticationFilter(authenticationManager()), BasicAuthenticationFilter.class);
     }
 
     @Bean
