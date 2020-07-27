@@ -55,6 +55,9 @@ spring:
     user:
       name: user
       password: user
+  mvc:
+    servlet:
+      load-on-startup: 100
 mybatis-plus:
   configuration:
     database-id: datasource

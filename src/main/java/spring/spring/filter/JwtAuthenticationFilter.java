@@ -21,7 +21,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     @SneakyThrows
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) {
         String token = request.getHeader("token");
-        if (StringUtils.isBlank(token)) {
+        if (!request.getRequestURI().contains("/register") && StringUtils.isBlank(token)) {
             return;
         }
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = JwtUtil.parseToken(token);

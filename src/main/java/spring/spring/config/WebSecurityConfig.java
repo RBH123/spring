@@ -10,12 +10,21 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
+import spring.spring.dao.UsersMapper;
 import spring.spring.filter.AuthenticationProvider;
-import spring.spring.filter.JwtAuthenticationFilter;
 import spring.spring.filter.JwtLoginFilter;
+import spring.spring.filter.RegisterAuthericationFilter;
 import spring.spring.service.AuthenticationUserDetailService;
+
+import javax.sql.DataSource;
+
+import static spring.spring.constant.SecurityConstant.REMEMBER_ME_KEY;
+import static spring.spring.constant.SecurityConstant.REMEMBER_ME_PARAMETER;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +32,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AuthenticationUserDetailService authenticationUserDetailService;
+    @Autowired
+    private DataSource dataSource;
+    @Autowired
+    private UsersMapper usersMapper;
+
+    @Bean
+    public RememberMeServices rememberMeServices() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+        PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices = new PersistentTokenBasedRememberMeServices(REMEMBER_ME_KEY, authenticationUserDetailService, jdbcTokenRepository);
+        persistentTokenBasedRememberMeServices.setParameter(REMEMBER_ME_PARAMETER);
+        persistentTokenBasedRememberMeServices.setTokenValiditySeconds(3600);
+        return persistentTokenBasedRememberMeServices;
+    }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -39,14 +62,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @SneakyThrows
     public void configure(HttpSecurity httpSecurity) {
         httpSecurity
-                .cors().and().csrf().disable()
+                .cors()
+                .and()
+                .csrf()
+                .disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/").permitAll()
-                .antMatchers("/login", "/register").permitAll()
+                .antMatchers("/login").permitAll()
                 .anyRequest()
                 .authenticated();
-        httpSecurity.addFilterBefore(new JwtLoginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
-        httpSecurity.addFilterBefore(new JwtAuthenticationFilter(authenticationManager()), BasicAuthenticationFilter.class);
+        RememberMeAuthenticationFilter rememberMeAuthenticationFilter = new RememberMeAuthenticationFilter(authenticationManager(), rememberMeServices());
+        httpSecurity
+                .addFilterAfter(new JwtLoginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new RegisterAuthericationFilter(authenticationManager(), usersMapper), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(rememberMeAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

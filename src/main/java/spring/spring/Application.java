@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 @MapperScan(basePackages = "spring.spring.dao")
 @EnableDiscoveryClient
 @RefreshScope
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"spring.spring"})
 public class Application {
 
     @Autowired

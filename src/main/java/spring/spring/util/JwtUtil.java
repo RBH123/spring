@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import spring.spring.pojo.ao.UserInfoAo;
 
 import java.util.Date;
 import java.util.Map;
@@ -20,10 +21,10 @@ public class JwtUtil {
      * @param jwtToken
      * @return
      */
-    public static String generateToken(UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) {
+    public static String generateToken(UserInfoAo ao) {
         String token = JWT.create()
-                .withClaim("username", String.valueOf(usernamePasswordAuthenticationToken.getPrincipal()))
-                .withClaim("password", String.valueOf(usernamePasswordAuthenticationToken.getCredentials()))
+                .withClaim("username", ao.getUsername())
+                .withClaim("password", ao.getPassword())
                 .withExpiresAt(new Date(System.currentTimeMillis() / 1000 + EXPIRE_TIME))
                 .withIssuedAt(new Date())
                 .withIssuer("ruan")

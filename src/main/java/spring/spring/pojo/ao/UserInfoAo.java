@@ -16,8 +16,9 @@ public class UserInfoAo extends UsernamePasswordAuthenticationToken {
     public UserInfoAo(Object principal, Object credentials) {
         super(principal, credentials);
     }
-    public UserInfoAo(String username,String password,String mobile,String email){
-        super(null,null);
+
+    public UserInfoAo(String username, String password, String mobile, String email) {
+        super(null, null);
         this.username = username;
         this.password = password;
         this.mobile = mobile;

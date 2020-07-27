@@ -10,13 +10,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import spring.spring.pojo.ao.UserInfoAo;
-import spring.spring.util.JwtUtil;
+import spring.spring.util.HttpUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 @Slf4j
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -29,7 +27,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String body = getBody(request);
+        String body = HttpUtils.getBody(request);
         userInfoAo = JSON.parseObject(body, UserInfoAo.class);
         super.setDetails(request, userInfoAo);
         return super.getAuthenticationManager().authenticate(userInfoAo);
@@ -44,20 +42,8 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         if (this.eventPublisher != null) {
             eventPublisher.publishEvent(new InteractiveAuthenticationSuccessEvent(authResult, this.getClass()));
         }
+        super.getRememberMeServices().loginSuccess(request, response, authResult);
         log.info("登录成功");
-        response.addHeader("token", JwtUtil.generateToken(userInfoAo));
-    }
-
-    public String getBody(HttpServletRequest request) {
-        StringBuilder sb = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()))) {
-            String body = "";
-            while ((body = reader.readLine()) != null) {
-                sb.append(body);
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-        return sb.toString();
+        super.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
 }
