@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.RedisTemplate;
-import spring.spring.constant.ElasticsearchIndexEnum;
 import spring.spring.dao.entity.Users;
 import spring.spring.elasticsearch.ElasticsearchService;
 import spring.spring.message.kafka.producer.MessageProducer;
@@ -52,8 +51,10 @@ public class Application {
                 .endObject()
                 .endObject();
 //        elasticsearchService.createIndex(ElasticsearchIndexEnum.DATA_INDEX.getIndex(), xContentBuilder);
-        Users users = Users.builder().username("张三").mobile("19866732217").email("1692100705@qq.com").build();
-        elasticsearchService.addData(ElasticsearchIndexEnum.DATA_INDEX.getIndex(), users);
+//        Users users = Users.builder().username("张三").mobile("19866732217").email("1692100705@qq.com").build();
+//        elasticsearchService.addData(ElasticsearchIndexEnum.DATA_INDEX.getIndex(), users);
+        Users users = elasticsearchService.queryData(Users.class, "张三");
+        System.out.println(users);
         messageSend.sendMessage("tagA", "test-key", "今天天气好晴朗");
     }
 

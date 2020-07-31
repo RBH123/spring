@@ -27,4 +27,14 @@ public interface ElasticsearchService {
      * @param <T>
      */
     <T> void addBatchData(String index, List<T> list);
+
+    /**
+     * 根据条件查询数据
+     *
+     * @param t
+     * @param condition
+     * @param <T>
+     * @return
+     */
+    <T> T queryData(Class<T> t, String condition);
 }

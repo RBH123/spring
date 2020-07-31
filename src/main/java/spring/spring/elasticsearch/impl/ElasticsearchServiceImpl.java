@@ -5,11 +5,17 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.stereotype.Service;
 import spring.spring.elasticsearch.ElasticsearchService;
 
@@ -48,5 +54,20 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
             bulkRequest.add(indexRequest);
         });
         restHighLevelClient.bulk(bulkRequest, RequestOptions.DEFAULT);
+    }
+
+    @Override
+    @SneakyThrows
+    public <T> T queryData(Class<T> tClass, String condition) {
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("username", "张三"));
+        SearchSourceBuilder query = SearchSourceBuilder.searchSource().query(boolQueryBuilder);
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.source(query);
+        SearchResponse search = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        SearchHit[] hits = search.getHits().getHits();
+        SearchHit hit = hits[0];
+        String sourceAsString = hit.getSourceAsString();
+        T t = JSON.parseObject(sourceAsString, tClass);
+        return t;
     }
 }
