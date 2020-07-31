@@ -36,9 +36,6 @@ spring:
           destination: test-rocketmq
           content-type: application/json
           group: rocketmq-consumer-group
-  elasticsearch:
-    rest:
-      uris: 192.168.17.14:9200
   kafka:
     bootstrap-servers: 192.168.17.14:9092
     producer:

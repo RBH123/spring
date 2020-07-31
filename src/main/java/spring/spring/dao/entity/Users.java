@@ -21,4 +21,5 @@ public class Users {
     private String password;
     private Integer role;
     private String mobile;
+    private String email;
 }
