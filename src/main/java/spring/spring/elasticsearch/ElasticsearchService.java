@@ -3,6 +3,7 @@ package spring.spring.elasticsearch;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ElasticsearchService {
 
@@ -31,10 +32,20 @@ public interface ElasticsearchService {
     /**
      * 根据条件查询数据
      *
-     * @param t
+     * @param tClass
      * @param condition
      * @param <T>
      * @return
      */
-    <T> T queryData(Class<T> t, String condition);
+    <T> T queryDataOne(Class<T> tClass, String condition);
+
+    /**
+     * 批量查询数据
+     *
+     * @param tClass
+     * @param conditions
+     * @param <T>
+     * @return
+     */
+    <T> List<T> queryDataList(Class<T> tClass, Map<String, Object> conditions);
 }

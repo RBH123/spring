@@ -12,15 +12,18 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.stereotype.Service;
 import spring.spring.elasticsearch.ElasticsearchService;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -58,9 +61,9 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
 
     @Override
     @SneakyThrows
-    public <T> T queryData(Class<T> tClass, String condition) {
+    public <T> T queryDataOne(Class<T> tClass, String condition) {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("username", "张三"));
-        SearchSourceBuilder query = SearchSourceBuilder.searchSource().query(boolQueryBuilder);
+        SearchSourceBuilder query = SearchSourceBuilder.searchSource().query(boolQueryBuilder).from(0).size(1);
         SearchRequest searchRequest = new SearchRequest();
         searchRequest.source(query);
         SearchResponse search = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
@@ -69,5 +72,34 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
         String sourceAsString = hit.getSourceAsString();
         T t = JSON.parseObject(sourceAsString, tClass);
         return t;
+    }
+
+    @Override
+    @SneakyThrows
+    public <T> List<T> queryDataList(Class<T> tClass, Map<String, Object> conditions) {
+        Set<String> keySet = conditions.keySet();
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        List<QueryBuilder> builders = boolQueryBuilder.must();
+        keySet.forEach(key -> {
+            if (key.equals("username")) {
+                MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery(key, conditions.get(key));
+                builders.add(matchQueryBuilder);
+                return;
+            }
+            TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery(key, conditions.get(key));
+            builders.add(termQueryBuilder);
+        });
+        SearchSourceBuilder query = SearchSourceBuilder.searchSource().query(boolQueryBuilder);
+        SearchRequest request = new SearchRequest();
+        request.source(query);
+        SearchResponse searchResponse = restHighLevelClient.search(request, RequestOptions.DEFAULT);
+        SearchHit[] hits = searchResponse.getHits().getHits();
+        List<SearchHit> searchHits = Arrays.asList(hits);
+        List<T> tList = searchHits.stream().map(s -> {
+            String source = s.getSourceAsString();
+            T t = JSON.parseObject(source, tClass);
+            return t;
+        }).filter(u -> u != null).collect(Collectors.toList());
+        return tList;
     }
 }
