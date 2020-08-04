@@ -13,9 +13,4 @@ public class DateTimeSerializer extends JsonSerializer<DateTime> {
     public void serialize(DateTime dateTime, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeString(dateTime.toString("yyyy-MM-dd HH:mm:ss"));
     }
-
-    public static void main(String[] args) {
-        String s = DateTime.now().toString("yyyy-MM-dd");
-        System.out.println(s);
-    }
 }

@@ -16,10 +16,13 @@ import spring.spring.dao.entity.Users;
 import spring.spring.elasticsearch.ElasticsearchService;
 import spring.spring.message.kafka.producer.MessageProducer;
 import spring.spring.message.rocketmq.producer.MessageProduct;
+import spring.spring.util.DistributedUtils;
+import spring.spring.util.ThreadPoolUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @MapperScan(basePackages = "spring.spring.dao")
 @EnableDiscoveryClient
@@ -35,6 +38,8 @@ public class Application {
     RedisTemplate redisTemplate;
     @Autowired
     ElasticsearchService elasticsearchService;
+    @Autowired
+    DistributedUtils distributedUtils;
 
     @PostConstruct
     @SneakyThrows
@@ -64,9 +69,19 @@ public class Application {
 //        System.out.println(users);
         Map<String, Object> maps = Maps.newHashMap();
         maps.put("username", "张");
-        List<Users> usersList = elasticsearchService.queryDataList(Users.class, maps);
-        System.out.println(usersList);
         messageSend.sendMessage("tagA", "test-key", "今天天气好晴朗");
+        ThreadPoolExecutor executor = ThreadPoolUtils.getInstance();
+        for (int i = 0; i < 10; i++) {
+            executor.execute(() -> {
+                try {
+                    distributedUtils.tryLock();
+                    Thread.sleep(10000);
+                    distributedUtils.releaseLock();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 
     public static void main(String[] args) {
