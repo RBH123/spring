@@ -36,6 +36,11 @@ spring:
           destination: test-rocketmq
           content-type: application/json
           group: rocketmq-consumer-group
+    sentinel:
+      transport:
+        dashboard: 192.168.17.14:8080
+        port: 8719
+        client-ip: 192.168.17.14
   kafka:
     bootstrap-servers: 192.168.17.14:9092
     producer:

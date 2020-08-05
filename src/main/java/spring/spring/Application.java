@@ -11,23 +11,25 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.redis.core.RedisTemplate;
 import spring.spring.dao.entity.Users;
 import spring.spring.elasticsearch.ElasticsearchService;
 import spring.spring.message.kafka.producer.MessageProducer;
 import spring.spring.message.rocketmq.producer.MessageProduct;
 import spring.spring.util.DistributedUtils;
-import spring.spring.util.ThreadPoolUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadPoolExecutor;
 
+@ComponentScan(basePackages = "spring.spring.*")
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @MapperScan(basePackages = "spring.spring.dao")
 @EnableDiscoveryClient
 @RefreshScope
-@SpringBootApplication(scanBasePackages = {"spring.spring"})
+@SpringBootApplication
 public class Application {
 
     @Autowired
@@ -70,18 +72,18 @@ public class Application {
         Map<String, Object> maps = Maps.newHashMap();
         maps.put("username", "张");
         messageSend.sendMessage("tagA", "test-key", "今天天气好晴朗");
-        ThreadPoolExecutor executor = ThreadPoolUtils.getInstance();
-        for (int i = 0; i < 10; i++) {
-            executor.execute(() -> {
-                try {
-                    distributedUtils.tryLock();
-                    Thread.sleep(10000);
-                    distributedUtils.releaseLock();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-        }
+//        ThreadPoolExecutor executor = ThreadPoolUtils.getInstance();
+//        for (int i = 0; i < 10; i++) {
+//            executor.execute(() -> {
+//                try {
+//                    boolean lock = distributedUtils.tryLock("lock-key", "lock-value", 100000);
+//                    System.out.println(Thread.currentThread().getName() + "获得锁状态:" + lock);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            });
+//        }
+//        distributedUtils.tryLock("lock-key", "lock-value", 100000);
     }
 
     public static void main(String[] args) {

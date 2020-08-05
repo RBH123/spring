@@ -18,7 +18,6 @@ import org.springframework.security.web.authentication.rememberme.RememberMeAuth
 import spring.spring.dao.UsersMapper;
 import spring.spring.filter.AuthenticationProvider;
 import spring.spring.filter.JwtLoginFilter;
-import spring.spring.filter.RegisterAuthericationFilter;
 import spring.spring.service.AuthenticationUserDetailService;
 
 import javax.sql.DataSource;
@@ -69,13 +68,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/").permitAll()
                 .antMatchers("/login").permitAll()
-                .anyRequest()
-                .authenticated();
+                .anyRequest().permitAll();
         RememberMeAuthenticationFilter rememberMeAuthenticationFilter = new RememberMeAuthenticationFilter(authenticationManager(), rememberMeServices());
         httpSecurity
-                .addFilterAfter(new JwtLoginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new RegisterAuthericationFilter(authenticationManager(), usersMapper), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(rememberMeAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterAfter(new JwtLoginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
+//                .addFilterAfter(new RegisterAuthericationFilter(authenticationManager(), usersMapper), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterAfter(rememberMeAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

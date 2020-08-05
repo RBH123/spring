@@ -8,6 +8,8 @@ import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.params.SetParams;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -31,6 +33,8 @@ public class DistributedUtils {
 
     @Autowired
     private ZooKeeper zooKeeper;
+    @Autowired
+    private Jedis jedis;
 
     private ThreadLocal threadLocal = new ThreadLocal();
 
@@ -121,5 +125,13 @@ public class DistributedUtils {
         } catch (Exception e) {
             log.error("删除节点失败");
         }
+    }
+
+    public boolean tryLock(String key, String value, int timeout) {
+        String set = jedis.set(key, value, SetParams.setParams().nx().ex(timeout));
+        if (StringUtils.isNotBlank(set) && "OK".equalsIgnoreCase(set)) {
+            return true;
+        }
+        return false;
     }
 }

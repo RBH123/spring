@@ -53,9 +53,14 @@ public class ThreadPoolUtils {
             return Collections.EMPTY_LIST;
         }
         List<T> resultList = futures.stream().map(f -> {
-            T t = f.get(5, TimeUnit.SECONDS);
-            return t;
-        }).collect(Collectors.toList());
+            try {
+                T t = f.get(5, TimeUnit.SECONDS);
+                return t;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }).filter(f -> f != null).collect(Collectors.toList());
         return resultList;
     }
 }
