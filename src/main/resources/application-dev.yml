@@ -1,10 +1,10 @@
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 217024
-    url: jdbc:mysql://192.168.17.14:3306/data?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-    name: datasource
+  #  datasource:
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    username: root
+  #    password: 217024
+  #    url: jdbc:mysql://192.168.17.14:3306/data?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+  #    name: datasource
   redis:
     host: 192.168.17.14
     port: 6379
@@ -60,6 +60,16 @@ spring:
   mvc:
     servlet:
       load-on-startup: 100
+  datasource:
+    dynamic:
+      primary: master
+      datasource:
+        master:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          username: root
+          password: 217024
+          url: jdbc:mysql://192.168.17.14:3306/data?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      seata: true
 mybatis-plus:
   configuration:
     database-id: datasource
@@ -71,3 +81,11 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
+seata:
+  service:
+    grouplist:
+      default: "192.168.17.14:8091"
+    vgroup-mapping:
+      multi-datasource-service-group: default
+  application-id: seata-application
+  tx-service-group: distributed_tx_group

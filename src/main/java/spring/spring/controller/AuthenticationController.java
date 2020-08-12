@@ -19,7 +19,6 @@ public class AuthenticationController {
     /**
      * 注册
      */
-    @SentinelResource(value = "")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String register(@RequestBody Users users) throws ServerException {
         System.out.println(users);
