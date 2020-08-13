@@ -1,5 +1,5 @@
 #!/bin/bash -il
-name=rocky.docker-study
+name=rocky-docker
 docker ps -a | grep $name &>/dev/null
 if [ $? -eq 0 ]; then
   echo $name" is up,we will stop and remove it!!!"
@@ -16,4 +16,4 @@ else
   echo $name" image is not existed!!!"
 fi
 mvn clean package -Dmaven.skip.test=true
-docker run -d -p 8083:8082 --name rocky.docker-study rocky.docker-study:latest
+docker run -d -p 8083:8082 --name rocky-docker rocky-docker:latest
