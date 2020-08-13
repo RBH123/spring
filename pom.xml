@@ -281,9 +281,7 @@
                 <configuration>
                     <dockerHost>${docker.host}</dockerHost>
                     <imageName>${docker.image.prefix}.${project.build.finalName}</imageName>
-                    <imageTags>
-                        <imageTag>${project.version}</imageTag>
-                    </imageTags>
+                    <removeAllTags>true</removeAllTags>
                     <baseImage>java</baseImage>
                     <maintainer>rocky</maintainer>
                     <workdir>/tmp</workdir>
