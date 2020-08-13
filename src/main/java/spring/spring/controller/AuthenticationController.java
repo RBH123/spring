@@ -23,6 +23,6 @@ public class AuthenticationController {
         if (users == null) {
             throw new ServerException("用户信息必填");
         }
-        return "今天是个好日子，docker部署成功";
+        return "今天是个好日子";
     }
 }

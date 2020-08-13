@@ -258,47 +258,47 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>1.2.0</version>
-                <executions>
-                    <execution>
-                        <id>remove-image</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>removeImage</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>build-image</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <dockerHost>${docker.host}</dockerHost>
-                    <imageName>${docker.image.prefix}.${project.build.finalName}</imageName>
-                    <removeAllTags>true</removeAllTags>
-                    <baseImage>java</baseImage>
-                    <maintainer>rocky</maintainer>
-                    <workdir>/tmp</workdir>
-                    <entryPoint>
-                        ["java","-Djava.security.egd=file:/dev/urandom","-jar","${project.build.finalName}.jar"]
-                    </entryPoint>
-                    <registryUrl>${docker.registry}</registryUrl>
-                    <forceTags>true</forceTags>
-                    <resources>
-                        <resource>
-                            <targetPath>/tmp</targetPath>
-                            <directory>${project.build.directory}</directory>
-                            <include>${project.build.finalName}.jar</include>
-                        </resource>
-                    </resources>
-                </configuration>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>com.spotify</groupId>-->
+            <!--                <artifactId>docker-maven-plugin</artifactId>-->
+            <!--                <version>1.2.0</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>remove-image</id>-->
+            <!--                        <phase>package</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>removeImage</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                    <execution>-->
+            <!--                        <id>build-image</id>-->
+            <!--                        <phase>package</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>build</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--                <configuration>-->
+            <!--                    <dockerHost>${docker.host}</dockerHost>-->
+            <!--                    <imageName>${docker.image.prefix}.${project.build.finalName}</imageName>-->
+            <!--                    <removeAllTags>true</removeAllTags>-->
+            <!--                    <baseImage>java</baseImage>-->
+            <!--                    <maintainer>rocky</maintainer>-->
+            <!--                    <workdir>/tmp</workdir>-->
+            <!--                    <entryPoint>-->
+            <!--                        ["java","-Djava.security.egd=file:/dev/urandom","-jar","${project.build.finalName}.jar"]-->
+            <!--                    </entryPoint>-->
+            <!--                    <registryUrl>${docker.registry}</registryUrl>-->
+            <!--                    <forceTags>true</forceTags>-->
+            <!--                    <resources>-->
+            <!--                        <resource>-->
+            <!--                            <targetPath>/tmp</targetPath>-->
+            <!--                            <directory>${project.build.directory}</directory>-->
+            <!--                            <include>${project.build.finalName}.jar</include>-->
+            <!--                        </resource>-->
+            <!--                    </resources>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
         </plugins>
         <resources>
             <resource>
