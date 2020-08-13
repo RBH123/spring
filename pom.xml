@@ -284,7 +284,7 @@
                     <removeAllTags>true</removeAllTags>
                     <baseImage>java</baseImage>
                     <maintainer>rocky</maintainer>
-                    <workdir>/tmp</workdir>
+<!--                    <workdir>/tmp</workdir>-->
                     <entryPoint>
                         ["java","-Djava.security.egd=file:/dev/urandom","-jar","${project.build.finalName}.jar"]
                     </entryPoint>
