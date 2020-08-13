@@ -16,7 +16,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <docker.image.prefix>rocky</docker.image.prefix> <!-- 在docker运行时要用的，只是一个前缀而已，就像包名一样,可自己任意定义此名称 -->
+        <docker.image.prefix>rocky-docker</docker.image.prefix> <!-- 在docker运行时要用的，只是一个前缀而已，就像包名一样,可自己任意定义此名称 -->
         <java.version>1.8</java.version>
         <docker.registry>http://192.168.17.14:5050</docker.registry>
         <!--自己远程docker的ip地址-->
@@ -263,13 +263,13 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>1.2.0</version>
                 <executions>
-<!--                    <execution>-->
-<!--                        <id>remove-image</id>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>removeImage</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
+                    <execution>
+                        <id>remove-image</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>removeImage</goal>
+                        </goals>
+                    </execution>
                     <execution>
                         <id>build-image</id>
                         <phase>package</phase>
@@ -280,7 +280,7 @@
                 </executions>
                 <configuration>
                     <dockerHost>${docker.host}</dockerHost>
-                    <imageName>${docker.image.prefix}.${project.build.finalName}</imageName>
+                    <imageName>${docker.image.prefix}</imageName>
                     <removeAllTags>true</removeAllTags>
                     <baseImage>java</baseImage>
                     <maintainer>rocky</maintainer>
