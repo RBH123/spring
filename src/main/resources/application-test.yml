@@ -17,4 +17,3 @@ spring:
           destination: test-kafka
           content-type: application/json
           group: kafka-consumer-group
-      default-binder: kafka

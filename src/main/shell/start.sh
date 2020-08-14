@@ -8,6 +8,7 @@ if [ $? -eq 0 ]; then
 else
   echo $name" is not up!!!"
 fi
+
 docker images | grep $name &>/dev/null
 if [ $? -eq 0 ]; then
   echo $name" image is existed,we will remove it!!!"

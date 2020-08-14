@@ -231,24 +231,15 @@
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
             <version>2.2.1.RELEASE</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.seata/seata-spring-boot-starter -->
         <dependency>
-            <groupId>io.seata</groupId>
-            <artifactId>seata-spring-boot-starter</artifactId>
-            <version>1.3.0</version>
+            <groupId>com.github.danielwegener</groupId>
+            <artifactId>logback-kafka-appender</artifactId>
+            <version>0.2.0-RC2</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/io.seata/seata-all -->
         <dependency>
-            <groupId>io.seata</groupId>
-            <artifactId>seata-all</artifactId>
-            <version>1.3.0</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.baomidou/dynamic-datasource-spring-boot-starter -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-            <version>3.2.0</version>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>6.4</version>
         </dependency>
     </dependencies>
 
