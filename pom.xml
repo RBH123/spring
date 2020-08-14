@@ -263,13 +263,13 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>1.2.0</version>
                 <executions>
-                    <execution>
-                        <id>remove-image</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>removeImage</goal>
-                        </goals>
-                    </execution>
+                    <!--                    <execution>-->
+                    <!--                        <id>remove-image</id>-->
+                    <!--                        <phase>package</phase>-->
+                    <!--                        <goals>-->
+                    <!--                            <goal>removeImage</goal>-->
+                    <!--                        </goals>-->
+                    <!--                    </execution>-->
                     <execution>
                         <id>build-image</id>
                         <phase>package</phase>
