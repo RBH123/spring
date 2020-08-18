@@ -45,6 +45,6 @@ public class RegisterAuthericationFilter extends UsernamePasswordAuthenticationF
         users.setPassword(BCryptUtil.generateBCryPassword(userInfoAo.getPassword()));
         usersMapper.insert(users);
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        response.setHeader("token", JwtUtil.generateToken(userInfoAo));
+//        response.setHeader("token", JwtUtil.generateToken(userInfoAo));
     }
 }

@@ -24,6 +24,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Users users = new Users();
         BeanUtils.copyProperties(ao, users);
         usersMapper.insert(users);
-        response.setHeader("token", JwtUtil.generateToken(ao));
+//        response.setHeader("token", JwtUtil.generateToken(ao));
     }
 }

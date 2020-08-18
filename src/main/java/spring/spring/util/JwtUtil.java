@@ -1,48 +1,132 @@
 package spring.spring.util;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import spring.spring.pojo.ao.UserInfoAo;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+import spring.spring.config.JwtConfig;
 
+import javax.annotation.Resource;
 import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
 
+@Component
 public class JwtUtil {
 
-    final static String SECRET = "qwer";
-    final static long EXPIRE_TIME = 7 * 24 * 60 * 60;
+
+    @Resource
+    private JwtConfig jwtConfig;
 
     /**
      * 生成token
      *
-     * @param jwtToken
+     * @param subject
      * @return
      */
-    public static String generateToken(UserInfoAo ao) {
-        String token = JWT.create()
-                .withClaim("username", ao.getUsername())
-                .withClaim("password", ao.getPassword())
-                .withExpiresAt(new Date(System.currentTimeMillis() / 1000 + EXPIRE_TIME))
-                .withIssuedAt(new Date())
-                .withIssuer("ruan")
-                .withJWTId(UUID.randomUUID().toString())
-                .sign(Algorithm.HMAC512(SECRET));
-        return token;
+    public String createToken(String subject) {
+        Date nowDate = new Date();
+        //过期时间
+        Date expireDate = new Date(nowDate.getTime() + jwtConfig.getExpire() * 1000);
+        return Jwts.builder()
+                .setHeaderParam("type", "JWT")
+                .setSubject(subject)
+                .setIssuedAt(nowDate)
+                .setExpiration(expireDate)
+                .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret())
+                .compact();
     }
 
+
     /**
-     * 解析token
+     * 获取token中注册信息
      *
      * @param token
      * @return
      */
-    public static UsernamePasswordAuthenticationToken parseToken(String token) {
-        Map<String, Claim> claims = JWT.decode(token).getClaims();
-        String username = claims.get("username").asString();
-        String password = claims.get("password").asString();
-        return new UsernamePasswordAuthenticationToken(username, password);
+    public Claims getTokenClaim(String token) {
+        try {
+            return Jwts.parser().setSigningKey(jwtConfig.getSecret()).parseClaimsJws(token).getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 验证令牌
+     *
+     * @param token 令牌
+     * @param ao    用户
+     * @return 是否有效
+     */
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        String username = getUsernameFromToken(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    /**
+     * 从令牌中获取数据声明
+     *
+     * @param token 令牌
+     * @return 数据声明
+     */
+    private Claims getClaimsFromToken(String token) {
+        Claims claims;
+        try {
+            claims = Jwts.parser().setSigningKey(jwtConfig.getSecret()).parseClaimsJws(token).getBody();
+        } catch (Exception e) {
+            claims = null;
+        }
+        return claims;
+    }
+
+    /**
+     * 判断令牌是否过期
+     *
+     * @param token 令牌
+     * @return 是否过期
+     */
+    public Boolean isTokenExpired(String token) {
+        try {
+            Claims claims = getClaimsFromToken(token);
+            Date expiration = claims.getExpiration();
+            return expiration.before(new Date());
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    /**
+     * 验证token是否过期失效
+     *
+     * @param expirationTime
+     * @return
+     */
+    public boolean isTokenExpired(Date expirationTime) {
+        return expirationTime.before(new Date());
+    }
+
+    /**
+     * 获取token失效时间
+     *
+     * @param token
+     * @return
+     */
+    public Date getExpirationDateFromToken(String token) {
+        return getTokenClaim(token).getExpiration();
+    }
+
+    /**
+     * 获取用户名从token中
+     */
+    public String getUsernameFromToken(String token) {
+        return getTokenClaim(token).getSubject();
+    }
+
+    /**
+     * 获取jwt发布时间
+     */
+    public Date getIssuedAtDateFromToken(String token) {
+        return getTokenClaim(token).getIssuedAt();
     }
 }
