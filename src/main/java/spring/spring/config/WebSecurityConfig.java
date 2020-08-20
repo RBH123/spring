@@ -30,16 +30,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtUtil jwtUtil;
 
-//    @Bean
-//    public RememberMeServices rememberMeServices() {
-//        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
-//        jdbcTokenRepository.setDataSource(dataSource);
-//        PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices = new PersistentTokenBasedRememberMeServices(REMEMBER_ME_KEY, authenticationUserDetailService, jdbcTokenRepository);
-//        persistentTokenBasedRememberMeServices.setParameter(REMEMBER_ME_PARAMETER);
-//        persistentTokenBasedRememberMeServices.setTokenValiditySeconds(3600);
-//        return persistentTokenBasedRememberMeServices;
-//    }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         return new AuthenticationProvider(authenticationUserDetailService);
@@ -58,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/").permitAll()
                 .antMatchers("/login", "/register").permitAll()
+                .antMatchers("/auth/token").permitAll()
                 .anyRequest()
                 .permitAll()
                 .and()

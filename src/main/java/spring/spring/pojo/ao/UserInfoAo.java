@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 @Builder
 public class UserInfoAo extends UsernamePasswordAuthenticationToken {
 
+    private String aopsID;
     private String username;
     private String password;
     private String mobile;
@@ -17,11 +18,12 @@ public class UserInfoAo extends UsernamePasswordAuthenticationToken {
         super(principal, credentials);
     }
 
-    public UserInfoAo(String username, String password, String mobile, String email) {
+    public UserInfoAo(String username, String password, String mobile, String email, String aopsID) {
         super(null, null);
         this.username = username;
         this.password = password;
         this.mobile = mobile;
         this.email = email;
+        this.aopsID = aopsID;
     }
 }

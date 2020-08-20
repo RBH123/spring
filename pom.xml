@@ -241,6 +241,16 @@
             <artifactId>logstash-logback-encoder</artifactId>
             <version>6.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+            <version>2.2.4.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>8.16</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -315,6 +325,7 @@
                     <include>**/*.yml</include>
                     <include>**/*.sql</include>
                     <include>**/*.jpg</include>
+                    <include>**/*.jks</include>
                 </includes>
             </resource>
         </resources>
